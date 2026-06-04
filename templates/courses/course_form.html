@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="form-shell">
+  <div class="form-card">
+    <p class="eyebrow">Owner Studio</p>
+    <h1>{{ title }}</h1>
+    <form method="post" enctype="multipart/form-data" class="stack-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn" type="submit">Save course</button>
+      <a class="link-muted" href="{% url 'owner_dashboard' %}">Back to owner dashboard</a>
+    </form>
+  </div>
+</section>
+{% endblock %}

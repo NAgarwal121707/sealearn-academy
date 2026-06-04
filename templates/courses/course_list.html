@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Courses{% endblock %}
+{% block content %}
+<section class="section-head"><div><p class="badge">Courses</p><h1>Learn Merchant Navy concepts</h1></div></section>
+<form class="search" method="get"><input name="q" value="{{ q }}" placeholder="Search navigation, safety, engineering..."><button class="btn small">Search</button></form>
+<div class="grid">{% for course in courses %}{% include 'courses/course_card.html' %}{% empty %}<p class="empty">No course found.</p>{% endfor %}</div>
+{% endblock %}

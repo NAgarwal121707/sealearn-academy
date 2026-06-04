@@ -1,0 +1,4 @@
+<article class="course-card">
+  <div class="thumb">{% if course.thumbnail %}<img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">{% else %}<span>⚓</span>{% endif %}</div>
+  <div class="course-body"><p class="badge">{{ course.get_level_display }}</p><h3>{{ course.title }}</h3><p>{{ course.subtitle|default:course.description|truncatechars:90 }}</p><div class="card-bottom"><strong>₹{{ course.price }}</strong><a class="btn small" href="{{ course.get_absolute_url }}">Open</a></div></div>
+</article>

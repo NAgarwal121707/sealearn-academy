@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Student Signup{% endblock %}
+{% block content %}
+<div class="auth-card wide-auth">
+  <h1>Create student account</h1>
+  <p class="muted">Students can signup here to browse courses, enroll, watch recorded videos, join live classes and download notes.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn full">Create student account</button>
+  </form>
+  <p>Already registered? <a href="{% url 'login' %}">Login</a></p>
+</div>
+{% endblock %}

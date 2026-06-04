@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="section-head"><div><p class="badge">Welcome {{ user.first_name|default:user.username }}</p><h1>Your learning dashboard</h1></div></section>
+<h2>My Courses</h2><div class="grid">{% for e in enrolled %}{% with course=e.course %}{% include 'courses/course_card.html' %}{% endwith %}{% empty %}<p class="empty">You have not enrolled yet.</p>{% endfor %}</div>
+<h2>Available Courses</h2><div class="grid">{% for course in available %}{% include 'courses/course_card.html' %}{% empty %}<p class="empty">No available courses.</p>{% endfor %}</div>
+{% endblock %}

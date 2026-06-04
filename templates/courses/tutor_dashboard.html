@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Owner Dashboard{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div>
+    <p class="eyebrow">Owner Studio</p>
+    <h1>SeaLearn Academy Owner Dashboard</h1>
+    <p>Only the SeaLearn owner/admin can create courses, upload recorded videos, add live sessions, view uploads and publish content for students.</p>
+  </div>
+  <div class="actions-row">
+    <a class="btn" href="{% url 'course_create' %}">+ New Course</a>
+    <a class="btn secondary" href="{% url 'lesson_create' %}">+ Add Video / Live Class</a>
+  </div>
+</section>
+
+<div class="stats-grid">
+  <div class="stat-card"><strong>{{ stats.courses }}</strong><span>Total Courses</span></div>
+  <div class="stat-card"><strong>{{ stats.published }}</strong><span>Published</span></div>
+  <div class="stat-card"><strong>{{ stats.drafts }}</strong><span>Drafts</span></div>
+  <div class="stat-card"><strong>{{ stats.lessons }}</strong><span>Videos / Sessions</span></div>
+  <div class="stat-card"><strong>{{ stats.students }}</strong><span>Students</span></div>
+</div>
+
+<section class="panel">
+  <h2>Courses created by SeaLearn owner</h2>
+  {% if courses %}
+    <div class="table-wrap">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Status</th>
+            <th>Uploaded Videos / Live Classes</th>
+            <th>Students</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for course in courses %}
+          <tr>
+            <td>
+              <strong>{{ course.title }}</strong><br>
+              <small>{{ course.get_level_display }} • ₹{{ course.price }}</small>
+            </td>
+            <td>{% if course.is_published %}<span class="badge live">Published</span>{% else %}<span class="badge draft">Draft</span>{% endif %}</td>
+            <td>
+              {% if course.lessons.all %}
+                <ul class="mini-list">
+                  {% for lesson in course.lessons.all %}
+                    <li>
+                      <strong>{{ lesson.order }}. {{ lesson.title }}</strong>
+                      <span class="muted">({{ lesson.get_session_type_display }})</span>
+                      <br>
+                      {% if lesson.video_file %}<a href="{{ lesson.video_file.url }}" target="_blank">Open uploaded video</a>{% endif %}
+                      {% if lesson.video_url %}{% if lesson.video_file %} · {% endif %}<a href="{{ lesson.video_url }}" target="_blank">Open video URL</a>{% endif %}
+                      {% if lesson.live_link %}{% if lesson.video_file or lesson.video_url %} · {% endif %}<a href="{{ lesson.live_link }}" target="_blank">Open live link</a>{% endif %}
+                      · <a href="{% url 'lesson_update' lesson.pk %}">Edit</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <span class="empty">No videos uploaded yet.</span>
+              {% endif %}
+            </td>
+            <td>{{ course.enrollments.count }}</td>
+            <td class="action-links">
+              <a href="{{ course.get_absolute_url }}">View</a>
+              <a href="{% url 'lesson_create_for_course' course.pk %}">Add Video</a>
+              <a href="{% url 'course_update' course.pk %}">Edit</a>
+              <a href="{% url 'course_toggle_publish' course.pk %}">{% if course.is_published %}Unpublish{% else %}Publish{% endif %}</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3>No courses yet</h3>
+      <p>Start with one course like “Navigation Basics” or “Marine Engineering Basics”, then upload multiple videos inside it.</p>
+      <a class="btn" href="{% url 'course_create' %}">Create first course</a>
+    </div>
+  {% endif %}
+</section>
+
+<section class="panel upload-panel">
+  <h2>All uploaded videos and live classes</h2>
+  {% if lessons %}
+    <div class="lesson-list owner-lessons">
+      {% for lesson in lessons %}
+      <div class="lesson">
+        <div>
+          <p class="badge">{{ lesson.course.title }}</p>
+          <h3>{{ lesson.order }}. {{ lesson.title }}</h3>
+          <p>{{ lesson.description|default:'No description added.' }}</p>
+          {% if lesson.video_file %}
+            <video class="video-preview" controls src="{{ lesson.video_file.url }}"></video>
+          {% endif %}
+        </div>
+        <div class="lesson-actions">
+          {% if lesson.video_file %}<a class="btn small" href="{{ lesson.video_file.url }}" target="_blank">Open File</a>{% endif %}
+          {% if lesson.video_url %}<a class="btn small" href="{{ lesson.video_url }}" target="_blank">Open URL</a>{% endif %}
+          {% if lesson.live_link %}<a class="btn small secondary" href="{{ lesson.live_link }}" target="_blank">Live Link</a>{% endif %}
+          {% if lesson.notes_file %}<a class="btn small secondary" href="{{ lesson.notes_file.url }}" target="_blank">Notes</a>{% endif %}
+          <a class="btn small secondary" href="{% url 'lesson_update' lesson.pk %}">Edit</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">No video or live class uploaded yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

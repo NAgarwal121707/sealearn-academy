@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Merchant Navy Learning App{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Merchant Navy Education Platform</p>
+    <h1>SeaLearn Academy for recorded courses, live classes, notes and exam preparation.</h1>
+    <p>One academy owner uploads all Merchant Navy learning content. Students create accounts, enroll, watch videos and join live sessions.</p>
+    <div class="hero-actions">
+      <a class="btn" href="{% url 'student_signup' %}">Join as Student</a>
+      <a class="btn secondary" href="{% url 'login' %}">Owner Login</a>
+      <a class="btn ghost" href="{% url 'course_list' %}">View Courses</a>
+    </div>
+  </div>
+  <div class="hero-card download-card">
+    <h3>App downloads</h3>
+    <p>Desktop and mobile app links can be added here after packaging.</p>
+    <a class="download store">Download Desktop App</a>
+    <a class="download store">Download Mobile App</a>
+  </div>
+</section>
+
+<section class="features">
+  <article><h3>For Students</h3><p>Signup, enroll in courses, watch recorded lessons, join live sessions and access notes.</p></article>
+  <article><h3>For SeaLearn Owner</h3><p>Owner creates courses, uploads many videos, adds live class links and publishes content.</p></article>
+  <article><h3>Scalable Later</h3><p>The app is simple now, but the database can support more courses, videos, students and future mobile APIs.</p></article>
+</section>
+{% endblock %}

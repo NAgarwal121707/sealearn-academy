@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+<section class="detail">
+  <div class="detail-image">{% if course.thumbnail %}<img src="{{ course.thumbnail.url }}" alt="{{ course.title }}">{% else %}<span>⚓</span>{% endif %}</div>
+  <div>
+    <p class="badge">{{ course.get_level_display }}</p>
+    {% if not course.is_published %}<p><span class="badge draft">Draft - students cannot see this yet</span></p>{% endif %}
+    <h1>{{ course.title }}</h1>
+    <p class="lead">{{ course.subtitle }}</p>
+    <p>{{ course.description }}</p>
+    <h3>₹{{ course.price }}</h3>
+    {% if user.is_staff or user.is_superuser %}
+      <div class="lesson-actions">
+        <a class="btn small" href="{% url 'lesson_create_for_course' course.pk %}">Add Video / Live Class</a>
+        <a class="btn small secondary" href="{% url 'course_update' course.pk %}">Edit Course</a>
+      </div>
+    {% elif enrolled %}
+      <p class="success">You are enrolled.</p>
+    {% else %}
+      <a class="btn" href="{% url 'enroll_course' course.pk %}">Enroll now</a>
+    {% endif %}
+  </div>
+</section>
+<section class="section-head"><h2>Lessons</h2></section>
+<div class="lesson-list">
+{% for lesson in course.lessons.all %}
+  <div class="lesson">
+    <div>
+      <p class="badge">{{ lesson.get_session_type_display }}</p>
+      <h3>{{ lesson.order }}. {{ lesson.title }}</h3>
+      <p>{{ lesson.description }}</p>
+      {% if lesson.live_starts_at %}<p>Live at: {{ lesson.live_starts_at }}</p>{% endif %}
+      {% if can_access_lessons and lesson.video_file %}
+        <video class="video-preview" controls src="{{ lesson.video_file.url }}"></video>
+      {% endif %}
+    </div>
+    {% if can_access_lessons %}
+      <div class="lesson-actions">
+        {% if lesson.video_file %}<a class="btn small" href="{{ lesson.video_file.url }}" target="_blank">Watch recording</a>{% endif %}
+        {% if lesson.video_url %}<a class="btn small" href="{{ lesson.video_url }}" target="_blank">Open video</a>{% endif %}
+        {% if lesson.live_link %}<a class="btn small secondary" href="{{ lesson.live_link }}" target="_blank">Join live</a>{% endif %}
+        {% if lesson.notes_file %}<a class="btn small secondary" href="{{ lesson.notes_file.url }}" target="_blank">Notes</a>{% endif %}
+        {% if user.is_staff or user.is_superuser %}<a class="btn small secondary" href="{% url 'lesson_update' lesson.pk %}">Edit</a>{% endif %}
+      </div>
+    {% else %}<p class="locked">Enroll to access lesson links.</p>{% endif %}
+  </div>
+{% empty %}<p class="empty">Lessons will appear here after SeaLearn owner uploads them.</p>{% endfor %}
+</div>
+{% endblock %}
