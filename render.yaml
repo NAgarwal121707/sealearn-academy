@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: sealearn-academy
+    env: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn merchant_edu.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: CLOUDINARY_URL
+        sync: false

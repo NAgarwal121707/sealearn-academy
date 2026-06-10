@@ -4,7 +4,7 @@
   <div class="form-card">
     <p class="eyebrow">Owner Studio</p>
     <h1>{{ title }}</h1>
-    <p class="muted">Choose Recorded for uploaded MP4/video URL lessons, or Live for Zoom/Meet sessions with date and time.</p>
+    <p class="muted">Choose Recorded to upload a video directly from desktop/gallery. You can also add a video URL if needed. Choose Live for Zoom/Meet sessions with date and time.</p>
     <form method="post" enctype="multipart/form-data" class="stack-form">
       {% csrf_token %}
       {{ form.as_p }}
